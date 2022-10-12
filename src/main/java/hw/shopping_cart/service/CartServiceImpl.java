@@ -1,30 +1,33 @@
 package hw.shopping_cart.service;
 
+import hw.shopping_cart.CartForNewUser;
 import hw.shopping_cart.CartProduct;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@SessionScope
 public class CartServiceImpl implements CartService {
+    private final CartForNewUser cartForNewUser;
 
-    public List<CartProduct> cartProducts = new ArrayList<>();
+    public CartServiceImpl(CartForNewUser cartForNewUser) {
+        this.cartForNewUser = cartForNewUser;
+    }
+
 
     @Override
-    public List<CartProduct> addToProduct(List<Integer> idList) {
+    public List<CartProduct>  addToProduct(List<Integer> idList) {
 
         for(Integer id: idList){
-            CartProduct cp = new CartProduct(id);
-            cartProducts.add(cp);
+            CartProduct cartProduct = new CartProduct(id);
+            cartForNewUser.addCartProducts(cartProduct);
         }
-        return cartProducts;
+        return cartForNewUser.getCartProducts();
     }
 
     @Override
     public List<CartProduct> getAllProduct() {
-        return cartProducts;
+        return cartForNewUser.getCartProducts();
     }
 }
